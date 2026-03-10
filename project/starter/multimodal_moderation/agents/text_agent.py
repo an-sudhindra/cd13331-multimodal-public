@@ -34,10 +34,19 @@ Provide a detailed rationale for your choices as well as a confidence score betw
 #   - instructions=MODERATION_INSTRUCTIONS
 #   - output_type=TextModerationResult
 # Hint: Agent is already imported from pydantic_ai
-text_moderation_agent = None  # Replace with your Agent
-
+text_moderation_agent = Agent(
+    instructions=MODERATION_INSTRUCTIONS,
+    output_type=TextModerationResult
+)
 
 async def moderate_text(model_choice: ModelChoice, text: str) -> TextModerationResult:
+
+    result = await text_moderation_agent.run(
+        text,
+        model=model_choice.model,
+        model_settings=model_choice.model_settings
+    )
+    return result.output
 
     # TODO: Run the text_moderation_agent with a prompt containing the text,
     #       then return result.output
@@ -49,4 +58,4 @@ async def moderate_text(model_choice: ModelChoice, text: str) -> TextModerationR
     #           result = agent.run_sync([parameters])
     #       like we did in the class.
     # Make sure to pass: model=model_choice.model and model_settings=model_choice.model_settings
-    raise NotImplementedError("TODO: Implement text moderation")
+    # raise NotImplementedError("TODO: Implement text moderation")
